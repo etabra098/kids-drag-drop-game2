@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Color Match Drag & Drop Game</title>
+  <style>
+    body {
+      background: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%);
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    h1 {
+      color: #ff4081;
+    }
+    .container {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .box, .dropzone {
+      width: 100px;
+      height: 100px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: grab;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
+    }
+    .box:active {
+      transform: scale(1.1);
+    }
+    .dropzone {
+      border: 4px dashed #aaa;
+    }
+    #box-red { background-color: #f44336; color: white; }
+    #box-blue { background-color: #2196f3; color: white; }
+    #box-yellow { background-color: #ffeb3b; color: #333; }
+    #box-green { background-color: #4caf50; color: white; }
+
+    .success {
+      border: 4px solid #4caf50 !important;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎨 Color Match Game</h1>
+  <div class="container">
+    <div id="box-red" class="box" draggable="true">Red</div>
+    <div id="box-blue" class="box" draggable="true">Blue</div>
+    <div id="box-yellow" class="box" draggable="true">Yellow</div>
+    <div id="box-green" class="box" draggable="true">Green</div>
+  </div>
+  <br />
+  <div class="container">
+    <div class="dropzone" data-color="Red"></div>
+    <div class="dropzone" data-color="Blue"></div>
+    <div class="dropzone" data-color="Yellow"></div>
+    <div class="dropzone" data-color="Green"></div>
+  </div>
+
+  <script>
+    const boxes = document.querySelectorAll('.box');
+    const dropzones = document.querySelectorAll('.dropzone');
+
+    boxes.forEach(box => {
+      box.addEventListener('dragstart', e => {
+        e.dataTransfer.setData('text/plain', box.textContent);
+      });
+    });
+
+    dropzones.forEach(zone => {
+      zone.addEventListener('dragover', e => {
+        e.preventDefault();
+      });
+
+      zone.addEventListener('drop', e => {
+        e.preventDefault();
+        const color = e.dataTransfer.getData('text/plain');
+        if (zone.dataset.color === color) {
+          zone.textContent = color;
+          zone.classList.add('success');
+        } else {
+          alert('Oops! Try again!');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
